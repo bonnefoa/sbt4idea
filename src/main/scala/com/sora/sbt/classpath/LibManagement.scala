@@ -1,17 +1,34 @@
 package com.sora.sbt.classpath
 
 import java.io.File
-import com.intellij.openapi.module.Module
 import com.intellij.openapi.roots.libraries.{Library, LibraryTable}
 import com.intellij.openapi.roots.{OrderRootType, ModuleRootManager}
 import com.intellij.openapi.vfs.{VirtualFile, VirtualFileManager, JarFileSystem}
 import com.intellij.openapi.roots.libraries.Library.ModifiableModel
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.components.ProjectComponent
+import com.intellij.openapi.module.{ModuleComponent, Module}
 
+/**
+ * Lib management specique to a module
+ */
+class LibManagement(virtualFileManager: VirtualFileManager, project: Project, table: LibraryTable, module: Module) extends ModuleComponent {
+  def projectOpened = {}
 
-class LibManagement(val virtualFileManager: VirtualFileManager, val project: Project, val table: LibraryTable) extends ProjectComponent {
-  def addLibrary(module: Module, libName: String, jarFile: File): Unit = {
+  def projectClosed = {}
+
+  def moduleAdded = {}
+
+  def getComponentName = "Lib management"
+
+  def disposeComponent = {}
+
+  def initComponent = {}
+
+  /**
+   * Add the given jar to the module as a library
+   */
+
+  def addLibrary(libName: String, jarFile: File): Unit = {
     val rootManager = ModuleRootManager.getInstance(module);
     val urlString = VirtualFileManager.constructUrl(JarFileSystem.PROTOCOL, jarFile.getAbsolutePath().replaceAll("\\\\", "/") + JarFileSystem.JAR_SEPARATOR);
     val jarVirtualFile = virtualFileManager.findFileByUrl(urlString);
